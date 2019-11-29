@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.response import Response
+from django.core.exceptions import PermissionDenied
 
 from .forms import formUser
 
@@ -14,9 +15,9 @@ def handleLogin(request):
             password = request.POST.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                return HttpResponse("Login com sucesso  -  código 200.")
+                return HttpResponse("Login com sucesso  -  código 200.", status=200)
             else:
-                return HttpResponse("Acesso Proibido    -  código 403.")
+                raise PermissionDenied()
     else:
         form = formUser()
 
